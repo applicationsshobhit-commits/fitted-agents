@@ -35,6 +35,13 @@ const TYPES = {
   '.map': 'application/json', '.png': 'image/png', '.stl': 'model/stl', '.md': 'text/markdown; charset=utf-8',
 };
 
+/** Every address this Mac answers on, so a Wi-Fi link opened on the Mac itself can be spotted. */
+function ownAddresses() {
+  const out = new Set();
+  for (const list of Object.values(networkInterfaces())) for (const a of list || []) { out.add(a.address); out.add(`::ffff:${a.address}`); }
+  return out;
+}
+
 const isLocal = req => ['127.0.0.1', '::1', '::ffff:127.0.0.1'].includes(req.socket.remoteAddress);
 
 function lanAddress() {
@@ -157,6 +164,12 @@ async function handle(req, res) {
         return json(res, 200, { ok: true, message: 'Sent. You can close this page.' });
       } catch (err) { return json(res, err.code || 409, { error: String(err.message || err) }); }
     }
+  }
+  // The Wi-Fi link opened on this Mac: browsers only allow the camera on localhost
+  // (or https), so send it there. Same path and token, live camera works.
+  if (path.startsWith('/capture') && !isLocal(req) && ownAddresses().has(req.socket.remoteAddress)) {
+    res.writeHead(302, { Location: `http://localhost:${PORT}${req.url}` });
+    return res.end();
   }
   if (path === '/capture') { res.writeHead(302, { Location: '/capture/' + (req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '') }); return res.end(); }
   for (const [prefix, dir] of PUBLIC_MOUNTS) if (path.startsWith(prefix)) return serveFile(res, dir, path.slice(prefix.length));

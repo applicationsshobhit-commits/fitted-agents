@@ -124,3 +124,4 @@ details > :not(summary){margin-top:10px}
 .log li b{color:var(--ink);font-weight:500}
 .foot{text-align:right}
 .principles li{margin-bottom:6px}
+.cam-btn{display:inline-block;background:var(--accent);color:var(--surface);padding:9px 14px;border-radius:6px;text-decoration:none;font-weight:700;font-size:14px}
