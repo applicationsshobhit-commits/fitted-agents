@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fitted Agents</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600..800&family=Atkinson+Hyperlegible:wght@400;700&family=JetBrains+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="style.css">
+<script type="importmap">{ "imports": { "three": "/vendor/three/build/three.module.js" } }</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+<body>
+<header>
+  <div class="brand">Fitted <span>agents</span></div>
+  <div id="sysline" class="sysline"></div>
+</header>
+
+<main>
+  <aside class="runs">
+    <form id="newRun" class="card">
+      <h2>New design run</h2>
+      <label>Person <input name="person" required placeholder="Name"></label>
+      <label>Hand
+        <select name="side"><option value="right">Right</option><option value="left">Left</option></select>
+      </label>
+      <label>Goal <input name="goal" placeholder="e.g. eat with a spoon without help"></label>
+      <label>Notes <textarea name="notes" rows="2" placeholder="Anything the agents should know"></textarea></label>
+      <button class="primary" type="submit">Start</button>
+    </form>
+    <h2 class="list-h">Runs</h2>
+    <ol id="runList" class="run-list"></ol>
+  </aside>
+
+  <section id="detail" class="detail">
+    <div class="empty">Start a run, or pick one on the left.</div>
+  </section>
+</main>
+
+<template id="tplRun">
+  <div class="run-head">
+    <div>
+      <h1 data-f="title"></h1>
+      <p class="goal" data-f="goal"></p>
+    </div>
+    <span class="pill" data-f="status"></span>
+  </div>
+
+  <ol class="stages" data-f="stages"></ol>
+
+  <section class="card capture" data-f="capture" hidden>
+    <h2>1. Capture the hand</h2>
+    <div class="capture-grid">
+      <div class="qr" data-f="qr"></div>
+      <div>
+        <p>Open this link on a phone connected to the same Wi-Fi:</p>
+        <p class="link"><a data-f="wifi" target="_blank"></a></p>
+        <ol class="howto">
+          <li>Hold a bank card flat beside the hand, the same distance from the camera.</li>
+          <li>Record about 10 seconds with the phone's camera app: hand relaxed, open as wide as it goes, then close.</li>
+          <li>On the link, choose that video, calibrate on the card, record, then tap <b>Send to Fitted</b>.</li>
+        </ol>
+        <p class="muted small">On this Mac the live camera works too: <a data-f="local" target="_blank">open capture here</a>. Or upload a saved profile:
+          <input type="file" accept="application/json" data-f="upload"></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="card attention" data-f="attention" hidden>
+    <h2 data-f="attnTitle">Flags</h2>
+    <p class="best" data-f="best" hidden></p>
+    <ul class="flags" data-f="flags"></ul>
+  </section>
+
+  <section data-f="designsWrap" hidden>
+    <div class="section-h">
+      <h2>Designs</h2>
+      <p class="muted small" data-f="designSummary"></p>
+    </div>
+    <div class="designs" data-f="designs"></div>
+    <div class="card approve" data-f="approve">
+      <label>Note <input data-f="decisionNote" placeholder="Optional: what you changed your mind on, what to print first"></label>
+      <div class="row">
+        <button class="primary" data-act="approve">Approve ticked designs</button>
+        <button data-act="reject">Reject all</button>
+      </div>
+      <p class="muted small" data-f="decided"></p>
+    </div>
+  </section>
+
+  <section class="card" data-f="feedbackWrap" hidden>
+    <h2>Redo a stage</h2>
+    <div class="row">
+      <select data-f="retryStage">
+        <option value="design">Design</option><option value="research">Research</option>
+        <option value="build">Build</option><option value="render">Render</option><option value="review">Review</option>
+      </select>
+      <input data-f="retryNote" placeholder="Note for the agent, e.g. make the cuff 4 mm wider, try a strap instead">
+      <button data-act="retry">Redo</button>
+    </div>
+    <p class="muted small">Or <button class="link-btn" data-act="recapture" data-f="recapture">capture the hand again</button>: a new link, and every stage reruns once the new readings arrive.</p>
+  </section>
+
+  <details class="card" data-f="researchWrap" hidden>
+    <summary><h2>Research</h2></summary>
+    <div data-f="research"></div>
+  </details>
+
+  <details class="card">
+    <summary><h2>Token use</h2></summary>
+    <table class="usage"><thead><tr><th>Agent</th><th>Calls</th><th>Fresh tokens</th><th>Cache reads</th><th>Time</th></tr></thead><tbody data-f="usage"></tbody></table>
+    <p class="muted small">Warnings only: nothing is stopped. Limits live in data/budget.json.</p>
+  </details>
+
+  <details class="card">
+    <summary><h2>Activity</h2></summary>
+    <ol class="log" data-f="log"></ol>
+  </details>
+
+  <p class="muted small foot"><span data-f="vault"></span> · <button class="link-btn" data-act="delete">Delete run</button></p>
+</template>
+
+<script type="module" src="app.js"></script>
+</body>
+</html>

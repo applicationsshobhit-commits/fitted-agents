@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>render</title>
+<style>html,body{margin:0;background:#f4f7f6}#v{width:900px;height:640px}</style>
+<script type="importmap">{ "imports": { "three": "/vendor/three/build/three.module.js" } }</script>
+</head>
+<body>
+<div id="v"></div>
+<script type="module">
+// Used by the pipeline: headless Chrome loads this page and screenshots it.
+import { mountViewer } from '/ui/viewer.js';
+const stl = new URLSearchParams(location.search).get('stl');
+mountViewer(document.getElementById('v'), stl, { interactive: false, width: 900, height: 640 })
+  .then(() => { document.title = 'ready'; }, err => { document.body.textContent = 'render failed: ' + err.message; });
+</script>
+</body>
+</html>

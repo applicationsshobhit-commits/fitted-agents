@@ -1,0 +1,43 @@
+{
+  "_policy": {
+    "adapt": "Open licence: the text is stored, and designs may adapt the ideas and geometry (with attribution; share-alike licences pass on).",
+    "cite": "Non-commercial or restricted licence: metadata and our own summary only. Designs may cite it as a requirement, never copy from it.",
+    "link": "No clear licence: title and link only. Never ingested."
+  },
+  "adaptLicenses": ["CERN-OHL", "Apache-2.0", "MIT", "BSD", "CC-BY-4.0", "CC-BY-SA-4.0", "CC0-1.0"],
+  "citeLicenses": ["CC-BY-NC", "WHO"],
+  "github": [
+    { "org": "makersmakingchange", "label": "Makers Making Change" }
+  ],
+  "githubRepos": [],
+  "zenodo": {
+    "perQuery": 25,
+    "queries": [
+      "assistive device 3D printed",
+      "adaptive utensil",
+      "hand orthosis 3D printing",
+      "cerebral palsy upper limb device",
+      "grip aid assistive technology",
+      "universal cuff",
+      "assistive technology open source hardware",
+      "splint 3D printed hand"
+    ]
+  },
+  "citeOnly": [
+    {
+      "id": "who-aps",
+      "title": "WHO Assistive Product Specifications and their use",
+      "url": "https://www.who.int/publications/i/item/9789240059375",
+      "license": "CC-BY-NC-SA-3.0-IGO",
+      "summary": "Functional and performance requirements for 26 priority assistive products: intended users, context of use, safety and performance, materials, maintenance, and standards. Use as a requirements checklist, cited, not copied."
+    },
+    {
+      "id": "cambridge-idt",
+      "title": "Cambridge Inclusive Design Toolkit",
+      "url": "https://www.inclusivedesigntoolkit.com/",
+      "license": "unclear",
+      "summary": "General inclusive design method: reduce demands on dexterity, reach, strength, vision and cognition; estimate how many people a design excludes. Link only."
+    }
+  ],
+  "_unverified": "CANLAB, OpenXwalk and OpenMedTech Lab could not be found online under those names (2026-10-14). Add their GitHub org or repo here once you have a link: githubRepos takes \"owner/repo\", github takes { org }."
+}
