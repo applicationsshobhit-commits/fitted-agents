@@ -45,7 +45,7 @@ Sizing rules of thumb:
   perimeter = circumference + 2–4% for padding or soft tissue, or leave it
   adjustable (straps, slots, a C-shape that opens). If a needed circumference
   is missing, design it adjustable and say so in risks.
-- If `scale.method` isn't "reference" or "tape", camera lengths are estimates.
+- If `scale.method` isn't "reference", "measured" or "tape", camera lengths are estimates.
   Say so in risks.
 - Leave clearance: 2–4 mm each side for anything the body slides into.
 - Printed parts larger than a 220 × 220 × 250 mm print bed must be split into
