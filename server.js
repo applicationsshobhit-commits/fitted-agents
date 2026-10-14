@@ -13,6 +13,7 @@ import { Run, STAGES, listLibrary } from './lib/pipeline.js';
 import { billingStatus } from './lib/billing.js';
 import { totals, readLedger, limits } from './lib/budget.js';
 import { stats as corpusStats } from './lib/corpus.js';
+import { partList, BODY_PARTS } from './lib/bodyparts.js';
 
 const LAN = process.env.FITTED_LAN !== '0';
 const runs = new Map(Run.loadAll().map(r => [r.id, r]));
@@ -86,22 +87,22 @@ async function api(req, res, path) {
   const action = m?.[2];
 
   if (path === '/api/status' && req.method === 'GET') {
-    return json(res, 200, { billing: billingStatus(), corpus: corpusStats(), vault: VAULT, library: listLibrary(), lan: LAN ? lanAddress() : null, stages: STAGES });
+    return json(res, 200, { billing: billingStatus(), corpus: corpusStats(), vault: VAULT, library: listLibrary(), bodyParts: partList(), lan: LAN ? lanAddress() : null, stages: STAGES });
   }
   if (path === '/api/usage' && req.method === 'GET') {
     return json(res, 200, { totals: totals(readLedger()), limits: limits() });
   }
   if (path === '/api/runs' && req.method === 'GET') {
     return json(res, 200, [...runs.values()].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).map(r => ({
-      id: r.id, person: r.person, side: r.side, goal: r.goal, status: r.status, createdAt: r.createdAt,
+      id: r.id, person: r.person, side: r.side, bodyPart: r.bodyPart, partName: r.partName, goal: r.goal, status: r.status, createdAt: r.createdAt,
       flags: r.flags.filter(f => f.severity !== 'info').length,
     })));
   }
   if (path === '/api/runs' && req.method === 'POST') {
     const b = await body(req);
     if (!b.person?.trim()) return json(res, 400, { error: 'person is required' });
-    if (!['left', 'right'].includes(b.side)) return json(res, 400, { error: 'side must be left or right' });
-    const created = Run.create(b);
+    let created;
+    try { created = Run.create(b); } catch (err) { return json(res, 400, { error: err.message }); }
     runs.set(created.id, created);
     return json(res, 200, view(created));
   }
@@ -142,12 +143,15 @@ async function handle(req, res) {
   if (cap) {
     const run = byToken(cap[1]);
     if (!run) return json(res, 404, { error: 'This capture link is not valid any more. Ask for a new one.' });
-    if (req.method === 'GET') return json(res, 200, { person: run.person, side: run.side, accepting: run.accepting });
+    if (req.method === 'GET') return json(res, 200, { person: run.person, side: run.side, bodyPart: run.bodyPart, accepting: run.accepting });
     if (req.method === 'POST') {
       try {
         const profile = await body(req);
-        if (profile.side && profile.side !== run.side) {
-          return json(res, 400, { error: `This link is for the ${run.side} hand, but the capture says ${profile.side}. Change the hand and record again.` });
+        if (profile.bodyPart !== run.bodyPart) {
+          return json(res, 400, { error: `This link is for the ${run.partName}, but the capture is for the ${BODY_PARTS[profile.bodyPart]?.label.toLowerCase() || 'unknown body part'}. Reload the link and capture again.` });
+        }
+        if (BODY_PARTS[run.bodyPart].sided && profile.side !== run.side) {
+          return json(res, 400, { error: `This link is for the ${run.partName}, but the capture says ${profile.side}. Change the side and record again.` });
         }
         run.receiveProfile(profile);
         return json(res, 200, { ok: true, message: 'Sent. You can close this page.' });

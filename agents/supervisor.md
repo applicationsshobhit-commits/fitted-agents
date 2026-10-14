@@ -17,8 +17,11 @@ device modules in `devices/`, and renders in `out/*.png`. Look at the renders.
 
 Check:
 - **Fit.** Do the built sizes match the readings? A grip wider than the hand
-  opens, a cuff narrower than the palm, a bore that won't take a utensil.
-  Compare `built.json` sizes to the profile, not just to the design's claims.
+  opens, a cuff narrower than the palm, a sleeve whose inner perimeter is
+  smaller than the tape circumference, a hinge that stops short of (or forces
+  past) the measured range of motion. Compare `built.json` sizes to the
+  profile, not just to the design's claims. Note which readings came from
+  tape and which from the camera.
 - **Reasons.** Does every size have a reason that holds up? Flag reasons that
   cite readings that don't say that.
 - **Sources.** Do the cited sources exist in research.json and support the
@@ -26,7 +29,8 @@ Check:
 - **Shape.** Do the renders look like the described device? Anything thin,
   sharp, or likely to pinch?
 - **Safety.** Choking-size loose parts, sharp edges, straps that could
-  tighten, anything a person with spasticity could be hurt by.
+  tighten, pressure points over bone, anything that bears body weight, and
+  anything a person with spasticity could be hurt by.
 - **Process.** Did any agent waste effort, or did the usage look out of
   proportion to the output?
 

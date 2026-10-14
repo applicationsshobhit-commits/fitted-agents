@@ -22,7 +22,10 @@
     <form id="newRun" class="card">
       <h2>New design run</h2>
       <label>Person <input name="person" required placeholder="Name"></label>
-      <label>Hand
+      <label>Body part
+        <select name="bodyPart" id="partSelect"><option value="hand">Hand</option></select>
+      </label>
+      <label id="sideField">Side
         <select name="side"><option value="right">Right</option><option value="left">Left</option></select>
       </label>
       <label>Goal <input name="goal" placeholder="e.g. eat with a spoon without help"></label>
@@ -50,17 +53,13 @@
   <ol class="stages" data-f="stages"></ol>
 
   <section class="card capture" data-f="capture" hidden>
-    <h2>1. Capture the hand</h2>
+    <h2 data-f="captureTitle">1. Capture</h2>
     <div class="capture-grid">
       <div class="qr" data-f="qr"></div>
       <div>
         <p>Open this link on a phone connected to the same Wi-Fi:</p>
         <p class="link"><a data-f="wifi" target="_blank"></a></p>
-        <ol class="howto">
-          <li>Hold a bank card flat beside the hand, the same distance from the camera.</li>
-          <li>Record about 10 seconds with the phone's camera app: hand relaxed, open as wide as it goes, then close.</li>
-          <li>On the link, choose that video, calibrate on the card, record, then tap <b>Send to Fitted</b>.</li>
-        </ol>
+        <ol class="howto" data-f="howto"></ol>
         <p class="muted small">On this Mac the live camera works too: <a data-f="local" target="_blank">open capture here</a>. Or upload a saved profile:
           <input type="file" accept="application/json" data-f="upload"></p>
       </div>

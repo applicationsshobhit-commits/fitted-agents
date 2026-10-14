@@ -17,7 +17,7 @@ const LIMIT = limitArg > 0 ? Number(process.argv[limitArg + 1]) : Infinity;
 
 // Zenodo search is broad; skip records with no assistive-technology words at all
 // before spending a model call on them.
-const ON_TOPIC = /assistive|disabilit|orthos|orthot|splint|grip|grasp|\bhand|prosthe|rehabilit|cerebral|palsy|utensil|adaptive|impair|accessib|wheelchair|dexterity|spastic|stroke|arthritis|switch|mobility/i;
+const ON_TOPIC = /assistive|disabilit|orthos|orthot|splint|grip|grasp|\bhand|prosthe|rehabilit|cerebral|palsy|utensil|adaptive|impair|accessib|wheelchair|dexterity|spastic|stroke|arthritis|switch|mobility|knee|ankle|elbow|wrist|brace|\bfoot|\bleg|limb|gait/i;
 
 const RECORD = {
   type: 'object',

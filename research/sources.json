@@ -4,10 +4,24 @@
     "cite": "Non-commercial or restricted licence: metadata and our own summary only. Designs may cite it as a requirement, never copy from it.",
     "link": "No clear licence: title and link only. Never ingested."
   },
-  "adaptLicenses": ["CERN-OHL", "Apache-2.0", "MIT", "BSD", "CC-BY-4.0", "CC-BY-SA-4.0", "CC0-1.0"],
-  "citeLicenses": ["CC-BY-NC", "WHO"],
+  "adaptLicenses": [
+    "CERN-OHL",
+    "Apache-2.0",
+    "MIT",
+    "BSD",
+    "CC-BY-4.0",
+    "CC-BY-SA-4.0",
+    "CC0-1.0"
+  ],
+  "citeLicenses": [
+    "CC-BY-NC",
+    "WHO"
+  ],
   "github": [
-    { "org": "makersmakingchange", "label": "Makers Making Change" }
+    {
+      "org": "makersmakingchange",
+      "label": "Makers Making Change"
+    }
   ],
   "githubRepos": [],
   "zenodo": {
@@ -20,7 +34,15 @@
       "grip aid assistive technology",
       "universal cuff",
       "assistive technology open source hardware",
-      "splint 3D printed hand"
+      "splint 3D printed hand",
+      "knee brace 3D printed",
+      "knee orthosis",
+      "ankle foot orthosis 3D printed",
+      "elbow orthosis",
+      "wrist hand orthosis splint",
+      "lower limb orthosis cerebral palsy",
+      "upper limb orthosis 3D printing",
+      "forearm splint custom fit"
     ]
   },
   "citeOnly": [

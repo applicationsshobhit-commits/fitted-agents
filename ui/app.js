@@ -33,6 +33,14 @@ async function loadStatus() {
   ];
   $('#sysline').replaceChildren(...chips);
   window.__vault = s.vault;
+  const sel = $('#partSelect');
+  if (sel.options.length !== s.bodyParts.length) {
+    const keep = sel.value;
+    sel.replaceChildren(...s.bodyParts.map(p => new Option(p.label, p.id)));
+    sel.value = keep;
+    window.__parts = Object.fromEntries(s.bodyParts.map(p => [p.id, p]));
+    sel.onchange = () => { $('#sideField').hidden = !window.__parts[sel.value]?.sided; };
+  }
 }
 
 // ---------- run list ----------
@@ -41,7 +49,7 @@ async function loadRuns() {
   const runs = await api('/api/runs');
   $('#runList').replaceChildren(...runs.map(r => {
     const li = h('li', { className: r.id === current ? 'sel' : '' },
-      h('b', { textContent: `${r.person} · ${r.side}` }),
+      h('b', { textContent: `${r.person} · ${r.partName || r.side}` }),
       h('small', { textContent: `${STATUS_TEXT[r.status] || r.status.replace(':', ': ')}${r.flags ? ` · ${r.flags} flag${r.flags > 1 ? 's' : ''}` : ''}` }),
       h('small', { textContent: `${r.goal || 'no goal given'} · ${r.createdAt.slice(0, 10)}` }),
     );
@@ -112,7 +120,7 @@ function render(run) {
     wire(view);
   }
 
-  f(view, 'title').textContent = `${run.person} · ${run.side} hand`;
+  f(view, 'title').textContent = `${run.person} · ${run.partName}`;
   f(view, 'goal').textContent = run.goal ? `Goal: ${run.goal}${run.notes ? ` — ${run.notes}` : ''}` : (run.notes || 'No goal given.');
   const pill = f(view, 'status');
   pill.textContent = run.busy && run.status.startsWith('running') ? `running ${run.status.split(':')[1]}` : STATUS_TEXT[run.status] || run.status;
@@ -132,6 +140,17 @@ function render(run) {
     const link = run.captureLinks.wifi || run.captureLinks.local;
     f(view, 'wifi').href = link; f(view, 'wifi').textContent = link;
     f(view, 'local').href = run.captureLinks.local;
+    f(view, 'captureTitle').textContent = `1. Capture the ${run.partName}`;
+    const tapeOnly = run.bodyPart === 'other';
+    f(view, 'howto').replaceChildren(...(tapeOnly ? [
+      'Have a soft tape measure ready.',
+      'Open the link, say what the device is for, and enter the measurements you need.',
+      'Tap Save measurements, then Send to Fitted.',
+    ] : [
+      `Have a bank card${run.bodyPart === 'hand' ? '' : ' and a soft tape measure'} ready. The page shows where each one goes.`,
+      'Record about 10 seconds with the phone\'s camera app, following the page\'s filming instructions.',
+      `On the link, choose that video, calibrate on the card, record${run.bodyPart === 'hand' ? '' : ', fill in the tape measurements'}, then tap Send to Fitted.`,
+    ]).map(t => h('li', { textContent: t })));
     const qr = f(view, 'qr');
     if (qr.dataset.link !== link && window.QRCode) {
       qr.replaceChildren();

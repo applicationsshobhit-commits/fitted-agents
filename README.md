@@ -1,7 +1,7 @@
 # fitted-agents
 
-Takes a hand capture and produces printable assistive devices sized to that
-hand. Each device comes with the reason for every size, the sources behind it,
+Takes a capture of a body part (hand, wrist, elbow, knee, ankle, or anything
+else by tape measure) and produces printable assistive devices sized to it. Each device comes with the reason for every size, the sources behind it,
 a review, and a note in Obsidian. A person approves each design before it's
 printed.
 
@@ -14,10 +14,12 @@ Google Chrome (for the renders).
 
 ## How a run works
 
-1. **Start a run** on the dashboard: who it's for, which hand, and the goal.
+1. **Start a run** on the dashboard: who it's for, which body part and side,
+   and the goal.
 2. **Capture.** The dashboard shows a link and a QR code. Anyone on the same
-   Wi-Fi opens it, picks a video of the hand, and taps *Send to Fitted*. Only
-   the measurements are sent. The video stays on the phone.
+   Wi-Fi opens it, picks a video, fills in the tape measurements the page asks
+   for, and taps *Send to Fitted*. Only the measurements are sent. The video
+   stays on the phone.
 3. **The agents run.** This takes about 7 minutes. Every stage writes its
    files to `data/runs/<id>/`.
 4. **Review.** The dashboard shows each design in 3D, with its sizes and
@@ -28,12 +30,35 @@ Google Chrome (for the renders).
    again. When you approve a new device type, it joins `devices/` so later
    runs can size it for other hands.
 
+## Body parts
+
+All defined in `~/fitted/capture/bodyparts.js`. The capture page, checks,
+agents and vault notes all read that file, so adding a body part is one entry.
+
+| Body part | Camera tracks | Tape measures |
+|---|---|---|
+| Hand | Hand tracker: finger lengths, opening, finger curl | Wrist (optional) |
+| Wrist & forearm | Body tracker: forearm length, wrist bend | Wrist, forearm, hand breadth |
+| Elbow | Upper arm, forearm, elbow bend | Upper arm, elbow, forearm |
+| Knee | Thigh, shin, knee bend | Thigh, knee, calf |
+| Ankle & foot | Shin, foot length, shin-to-foot angle | Calf, ankle, foot length and width |
+| Other | Nothing: you describe it | Up to six measurements you name |
+
+A camera measures joint angles well and lengths reasonably well (with a card
+to calibrate). It can't measure around a limb, so those readings come from
+the tape. Where both measure the same thing, the tape wins and the camera's
+value is kept for comparison.
+
+The three built-in devices are hand-only. For every other body part, the
+Designer writes new device types, which build up in `devices/` as you approve
+them.
+
 ## The seven roles
 
 | Role | What it is | Model |
 |---|---|---|
 | Orchestrator | `lib/pipeline.js`. The stage order is fixed, so this is code | none |
-| Capture | `~/fitted/capture` plus a capture link per run. A person films the hand | none |
+| Capture | `~/fitted/capture` plus a capture link per run. A person films and measures | none |
 | Researcher | `agents/researcher.md`. Reads the corpus, returns needs, principles and device ideas, with sources | Sonnet |
 | Designer | `agents/designer.md`. Sizes built-in devices, writes new device types as code, and tests each one | Opus |
 | Archivist | `lib/archivist.js`. Fills Obsidian templates. The Designer already wrote the reasons | none |
@@ -108,6 +133,12 @@ Obsidian with *Open folder as vault*.
 - **Sizing rules are drafts.** The built-in baselines in `~/fitted` are
   placeholders until an occupational therapist sets them. The Designer and
   Supervisor are told this.
+- **The body tracker is untested on real video.** Its maths is tested on
+  synthetic limbs, and the model loads and runs, but it hasn't seen a real
+  knee or elbow yet. Like the hand tracker, tight or unusual joints are the
+  biggest risk; tape measurements are the fallback.
+- **The wrist bend is one number.** The tracker can't tell bending up from
+  bending down, so the range covers both directions.
 - **The Wi-Fi link means no live camera on phones.** Browsers allow cameras
   only on https, so phones upload a recorded video instead. The live camera
   works on the Mac itself.
