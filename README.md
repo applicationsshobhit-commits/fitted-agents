@@ -5,6 +5,12 @@ else by tape measure) and produces printable assistive devices sized to it. Each
 a review, and a note in Obsidian. A person approves each design before it's
 printed.
 
+    # first time on a machine: both repos side by side in your home folder
+    git clone https://github.com/applicationsshobhit-commits/fitted.git ~/fitted
+    git clone https://github.com/applicationsshobhit-commits/fitted-agents.git ~/fitted-agents
+    cd ~/fitted && npm install --cache ~/.npm-herd && npm run setup
+    cd ~/fitted-agents
+
     npm install --cache ~/.npm-herd
     npm run research     # once: builds the research corpus (~10 min, mostly Haiku)
     npm start            # → http://localhost:7790
