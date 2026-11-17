@@ -5,18 +5,31 @@ else by tape measure) and produces printable assistive devices sized to it. Each
 a review, and a note in Obsidian. A person approves each design before it's
 printed.
 
-    # first time on a machine: both repos side by side in your home folder
+> **Early prototype, not a medical device.** Sizing rules are drafts, and the
+> trackers haven't been tested on the bodies this is for. Have a clinician
+> review anything worn for long periods or that bears weight.
+
+## Install
+
+You need:
+- A Mac (Linux probably works; untested) with [Node.js](https://nodejs.org) 20 or newer
+- Google Chrome (for the 3D renders)
+- [Claude Code](https://claude.com/claude-code) installed and signed in with a
+  Claude Pro or Max subscription. The agents run on your subscription. They
+  refuse to run if an API key is set or extra usage is on, so nothing is
+  billed per token.
+
+Both repos go side by side in your home folder:
+
     git clone https://github.com/applicationsshobhit-commits/fitted.git ~/fitted
     git clone https://github.com/applicationsshobhit-commits/fitted-agents.git ~/fitted-agents
-    cd ~/fitted && npm install --cache ~/.npm-herd && npm run setup
-    cd ~/fitted-agents
 
-    npm install --cache ~/.npm-herd
-    npm run research     # once: builds the research corpus (~10 min, mostly Haiku)
-    npm start            # → http://localhost:7790
+    cd ~/fitted && npm install && npm run setup     # setup downloads the tracking models (~17 MB)
+    cd ~/fitted-agents && npm install
+    npm run research     # once: builds the research library (~10 min, uses your Claude plan)
+    npm start            # → open http://localhost:7790
 
-Needs `~/fitted` next to it (the capture app and the built-in designs) and
-Google Chrome (for the renders).
+To keep `~/fitted` somewhere else, set `FITTED_DIR` to its path.
 
 ## How a run works
 
@@ -149,3 +162,9 @@ Obsidian with *Open folder as vault*.
   only on https, so phones upload a recorded video instead. The live camera
   works on the Mac itself.
 - **The server runs only while `npm start` runs.** It isn't a LaunchAgent yet.
+
+## Licence
+
+MIT, see `LICENSE`. The research library is built on your machine from
+openly licensed sources; designs that adapt a CC BY-SA source carry that
+licence when shared (the vault notes record which sources each design used).
